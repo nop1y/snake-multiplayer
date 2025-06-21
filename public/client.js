@@ -1,7 +1,6 @@
 import { drawSnakeSegment, drawSnakeHead, drawApple } from './renderer.js';
 
-const SERVER_IP = "http://192.168.1.76:3000";
-const socket = io(SERVER_IP);
+const socket = io();
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
