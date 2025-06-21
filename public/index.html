@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн Змейка</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>Змейка на двоих</h1>
+    </header>
+
+    <div class="page-container">
+        <aside class="side-panel">
+            <h2>Игроки</h2>
+            <div id="player-legend">
+                </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="game-info">
+                <p id="timer">Время: 0 сек</p>
+                <p id="player-count">Игроков: 0/2</p>
+            </div>
+            <div class="game-area">
+                <canvas id="gameCanvas"></canvas>
+                <div id="ready-overlay" class="ready-overlay">
+                    <div class="ready-box">
+                        <p id="ready-status">Ожидание игроков...</p>
+                        <button id="ready-button">Готов!</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="side-panel">
+            <h2>Как играть</h2>
+            <div class="how-to-play">
+                <p><strong>Цель:</strong> Заставить противника врезаться в стенку, ваш или свой хвост.</p>
+                <p><strong>Управление:</strong></p>
+                <ul>
+                    <li><kbd>↑</kbd> - Двигаться вверх</li>
+                    <li><kbd>↓</kbd> - Двигаться вниз</li>
+                    <li><kbd>←</kbd> - Двигаться влево</li>
+                    <li><kbd>→</kbd> - Двигаться вправо</li>
+                </ul>
+                <p>На мобильных устройствах управляйте с помощью свайпов.</p>
+                <p>Игра начнется, когда оба игрока нажмут "Готов".</p>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="site-footer">
+        <p>Игра "Змейка на двоих" | 2025</p>
+		<p>Шлыков Никита Алексеевич | М3О-123БВ-24</p>
+    </footer>
+
+	<script type="module" src="client.js" defer></script>
+</body>
+</html>

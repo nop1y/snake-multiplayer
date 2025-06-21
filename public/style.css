@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+:root {
+    --primary-bg: #f4f7f6;
+    --header-bg-start: #2c3e50;
+    --header-bg-end: #34495e;
+    --panel-bg: #ffffff;
+    --text-color: #333;
+    --header-text-color: #ffffff;
+    --accent-color: #3498db;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --border-radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    text-align: center;
+    overflow-x: hidden; /* фикс "уезда" вправо */
+}
+
+/* --- Хедер и футер --- */
+.site-header, .site-footer {
+    color: var(--header-text-color);
+    background: linear-gradient(90deg, var(--header-bg-start), var(--header-bg-end));
+    padding: 1.5rem 0;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    width: 100%;
+}
+
+.site-header h1 {
+    margin: 0;
+    font-weight: 300;
+    font-size: 2.2rem;
+}
+
+.site-footer {
+    padding: 1.2rem 0;
+    font-size: 0.9em;
+    margin-top: 20px;
+}
+
+/* --- Основной контейнер --- */
+.page-container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 0 20px;
+    gap: 25px;
+}
+
+/* --- Боковые панели --- */
+.side-panel {
+    background-color: var(--panel-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px var(--shadow-color);
+    flex: 1;
+    min-width: 220px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.side-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+.side-panel h2 {
+    margin-top: 0;
+    color: var(--header-bg-start);
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+/* --- Центральный контент --- */
+.main-content {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-area {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+canvas {
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: #ecf0f1;
+    box-shadow: 0 0 0 8px var(--panel-bg), 0 0 0 10px #e0e0e0;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- Оверлей "Готов" --- */
+.ready-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(44, 62, 80, 0.85);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+}
+.ready-box {
+    background: white;
+    color: #333;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+#ready-button {
+    font-size: 1.2em;
+    padding: 10px 30px;
+    border: none;
+    background-color: #27ae60;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+#ready-button:hover {
+    background-color: #2ecc71;
+    transform: scale(1.05);
+}
+#ready-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* --- Игроки --- */
+.player-entry {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.player-color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 10px;
+    border: 2px solid #333;
+}
+.player-status {
+    margin-left: auto;
+    font-style: italic;
+    color: #7f8c8d;
+}
+
+/* --- Стили для клавиш управления --- */
+.how-to-play kbd {
+    background-color: #ecf0f1;
+    border-radius: 3px;
+    border: 1px solid #bdc3c7;
+    padding: 2px 4px;
+    font-family: monospace;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+
+/* --- Прочее --- */
+.hidden {
+    display: none;
+}
+
+/* --- Мобильная адаптация --- */
+@media (max-width: 900px) {
+    .page-container {
+        flex-direction: column;
+        padding: 0 10px;
+    }
+    .side-panel {
+        min-width: initial;
+        width: 100%;
+    }
+    .main-content {
+        width: 100%;
+    }
+    .site-header h1 {
+        font-size: 1.8rem;
+    }
+}
