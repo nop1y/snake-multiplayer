@@ -13,12 +13,10 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 
-// --- Игровые константы ---
 const GAME_SIZE = 20;
-const TICK_RATE = 200; // мс
-const IDLE_TIMEOUT = 5000; // 5 секунд для авто-движения
+const TICK_RATE = 200; 
+const IDLE_TIMEOUT = 5000; 
 
-// --- Игровое состояние ---
 let players = {};
 let apple = generateApple();
 let gameState = {
@@ -28,7 +26,6 @@ let gameState = {
     winner: null,
 };
 
-// Функция для сброса и начала новой игры
 function resetGame() {
     console.log("Сброс игры и состояния игроков.");
     gameState.gameTime = 0;
@@ -36,7 +33,6 @@ function resetGame() {
     gameState.gameOver = false;
     gameState.winner = null;
 
-    // Сбрасываем состояние игроков, но не удаляем их
     Object.values(players).forEach(player => {
         player.x = Math.floor(Math.random() * GAME_SIZE);
         player.y = Math.floor(Math.random() * GAME_SIZE);
@@ -52,14 +48,12 @@ function generateApple() {
     return { x: Math.floor(Math.random() * GAME_SIZE), y: Math.floor(Math.random() * GAME_SIZE) };
 }
 
-// Таймер
 setInterval(() => {
     if (gameState.isGameRunning) {
         gameState.gameTime++;
     }
 }, 1000);
 
-// --- Обработка подключений ---
 io.on("connection", (socket) => {
   console.log("Игрок подключился: ", socket.id);
 
@@ -78,7 +72,7 @@ io.on("connection", (socket) => {
     tail: [],
     direction: null,
     isReady: false,
-    idleTime: 0, // <-- НОВОЕ: Счетчик бездействия
+    idleTime: 0,
   };
 
   io.emit("updateState", { players, apple, gameState });
@@ -88,7 +82,6 @@ io.on("connection", (socket) => {
       players[socket.id].isReady = true;
       
       const allPlayers = Object.values(players);
-      // Если игра окончена, готовность запускает сброс
       if (gameState.gameOver) {
           resetGame();
       } else {
@@ -106,7 +99,7 @@ io.on("connection", (socket) => {
   socket.on("move", (direction) => {
     if (players[socket.id] && gameState.isGameRunning) {
         const player = players[socket.id];
-        player.idleTime = 0; // Сбрасываем счетчик бездействия
+        player.idleTime = 0;
         const currentDirection = player.direction;
         if ((direction === 'up' && currentDirection !== 'down') ||
             (direction === 'down' && currentDirection !== 'up') ||
@@ -120,35 +113,30 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("Игрок отключился: ", socket.id);
     delete players[socket.id];
-    resetGame(); // Если кто-то вышел, сбрасываем игру
+    resetGame(); 
     io.emit("updateState", { players, apple, gameState });
   });
 });
 
-// --- Основной игровой цикл ---
 setInterval(() => {
   if (!gameState.isGameRunning) return;
 
-  // 1. Движение и проверка на бездействие
   Object.values(players).forEach(player => {
-    // Проверка на бездействие
     if (!player.direction) {
         player.idleTime += TICK_RATE;
         if (player.idleTime >= IDLE_TIMEOUT) {
-            player.direction = 'right'; // Начинаем двигаться вправо по умолчанию
+            player.direction = 'right';
         }
     }
 
-    if (!player.direction) return; // Если все еще нет направления, пропускаем ход
+    if (!player.direction) return; 
 
-    // Двигаем змейку
     player.tail.push({ x: player.x, y: player.y });
     if (player.direction === "up") player.y--;
     if (player.direction === "down") player.y++;
     if (player.direction === "left") player.x--;
     if (player.direction === "right") player.x++;
 
-    // Съедение яблока
     if (player.x === apple.x && player.y === apple.y) {
       apple = generateApple();
     } else {
@@ -156,18 +144,15 @@ setInterval(() => {
     }
   });
 
-  // 2. Проверка столкновений
   const playerIds = Object.keys(players);
   const playersArray = Object.values(players);
   let loserId = null;
 
   for (const player of playersArray) {
-    // Столкновение со стеной
     if (player.x < 0 || player.x >= GAME_SIZE || player.y < 0 || player.y >= GAME_SIZE) {
         loserId = player.id;
         break;
     }
-    // Столкновение со своим хвостом
     for (const segment of player.tail) {
         if (player.x === segment.x && player.y === segment.y) {
             loserId = player.id;
@@ -176,15 +161,12 @@ setInterval(() => {
     }
     if (loserId) break;
 
-    // Столкновение с другим игроком
     for (const otherPlayer of playersArray) {
         if (player.id === otherPlayer.id) continue;
-        // Столкновение с головой другого игрока (ничья)
         if (player.x === otherPlayer.x && player.y === otherPlayer.y) {
-            loserId = 'draw'; // Ничья
+            loserId = 'draw'; 
             break;
         }
-        // Столкновение с хвостом другого игрока
         for (const segment of otherPlayer.tail) {
             if (player.x === segment.x && player.y === segment.y) {
                 loserId = player.id;
@@ -196,7 +178,6 @@ setInterval(() => {
     if (loserId) break;
   }
   
-  // 3. Обработка конца игры
   if (loserId) {
     gameState.isGameRunning = false;
     gameState.gameOver = true;
@@ -205,7 +186,6 @@ setInterval(() => {
         gameState.winner = 'Ничья!';
     } else {
         const winner = playersArray.find(p => p.id !== loserId);
-        // Находим имя победителя
         const winnerIndex = playerIds.indexOf(winner.id) + 1;
         gameState.winner = `Игрок ${winnerIndex}`;
     }

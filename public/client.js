@@ -1,10 +1,8 @@
 import { drawSnakeSegment, drawSnakeHead, drawApple } from './renderer.js';
 
-// Замените на IP-адрес вашего компьютера!
-const SERVER_IP = "http://192.168.1.76:3000"; // <-- ВАЖНО: УКАЖИТЕ СВОЙ IP
+const SERVER_IP = "http://192.168.1.76:3000";
 const socket = io(SERVER_IP);
 
-// Элементы DOM
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const timerEl = document.getElementById("timer");
@@ -15,7 +13,7 @@ const readyButtonEl = document.getElementById("ready-button");
 const readyStatusEl = document.getElementById("ready-status");
 
 function resizeCanvas() {
-    const size = Math.min(window.innerWidth - 32, 500); // 32px = запас для отступов
+    const size = Math.min(window.innerWidth - 32, 500); 
     canvas.width = size;
     canvas.height = size;
 }
@@ -24,9 +22,6 @@ window.addEventListener("resize", resizeCanvas);
 
 const GRID_SIZE = canvas.width / 20;
 
-// --- Обработчики событий от сервера ---
-
-// Сервер присылает полное состояние игры
 socket.on("updateState", (state) => {
     updateUI(state);
     drawGame(state);
@@ -34,19 +29,16 @@ socket.on("updateState", (state) => {
 
 socket.on("full", (message) => { alert(message); });
 
-// Сервер дал команду начать игру (прячем оверлей)
 socket.on('gameStart', () => {
     readyOverlayEl.classList.add('hidden');
 });
 
-// --- Обработчики ввода от пользователя ---
 
 readyButtonEl.addEventListener('click', () => {
     socket.emit('playerReady');
     readyButtonEl.disabled = true;
 });
 
-// ... (код управления с клавиатуры и свайпов остается без изменений) ...
 window.addEventListener("keydown", (event) => { const directions = { 'ArrowUp': 'up', 'ArrowDown': 'down', 'ArrowLeft': 'left', 'ArrowRight': 'right' }; if (directions[event.key]) { event.preventDefault(); socket.emit("move", directions[event.key]); } });
 let touchStartX = 0, touchStartY = 0;
 canvas.addEventListener('touchstart', (e) => { e.preventDefault(); touchStartX = e.changedTouches[0].screenX; touchStartY = e.changedTouches[0].screenY; }, { passive: false });
@@ -54,7 +46,6 @@ canvas.addEventListener('touchend', (e) => { e.preventDefault(); handleSwipe(e.c
 function handleSwipe(endX, endY) { const deltaX = endX - touchStartX; const deltaY = endY - touchStartY; if (Math.abs(deltaX) > 30 || Math.abs(deltaY) > 30) { if (Math.abs(deltaX) > Math.abs(deltaY)) { socket.emit("move", deltaX > 0 ? 'right' : 'left'); } else { socket.emit("move", deltaY > 0 ? 'down' : 'up'); } } }
 
 
-// --- Функции отрисовки и обновления UI ---
 
 function updateUI(state) {
     const { players, apple, gameState } = state;
@@ -64,7 +55,6 @@ function updateUI(state) {
 
     updatePlayerLegend(players);
 
-    // НОВАЯ ЛОГИКА ДЛЯ ОВЕРЛЕЯ
     if (gameState.gameOver) {
         readyOverlayEl.classList.remove('hidden');
         readyStatusEl.innerHTML = `Игра окончена!<br><strong>Победитель: ${gameState.winner}</strong>`;

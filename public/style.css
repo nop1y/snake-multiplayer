@@ -25,10 +25,9 @@ body {
     flex-direction: column;
     min-height: 100vh;
     text-align: center;
-    overflow-x: hidden; /* фикс "уезда" вправо */
+    overflow-x: hidden; 
 }
 
-/* --- Хедер и футер --- */
 .site-header, .site-footer {
     color: var(--header-text-color);
     background: linear-gradient(90deg, var(--header-bg-start), var(--header-bg-end));
@@ -49,7 +48,6 @@ body {
     margin-top: 20px;
 }
 
-/* --- Основной контейнер --- */
 .page-container {
     display: flex;
     flex: 1;
@@ -60,7 +58,6 @@ body {
     gap: 25px;
 }
 
-/* --- Боковые панели --- */
 .side-panel {
     background-color: var(--panel-bg);
     padding: 20px;
@@ -83,7 +80,6 @@ body {
     font-weight: 600;
 }
 
-/* --- Центральный контент --- */
 .main-content {
     flex: 2;
     display: flex;
@@ -119,7 +115,6 @@ canvas {
     display: block;
 }
 
-/* --- Оверлей "Готов" --- */
 .ready-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -161,7 +156,6 @@ canvas {
     transform: none;
 }
 
-/* --- Игроки --- */
 .player-entry {
     display: flex;
     align-items: center;
@@ -180,7 +174,6 @@ canvas {
     color: #7f8c8d;
 }
 
-/* --- Стили для клавиш управления --- */
 .how-to-play kbd {
     background-color: #ecf0f1;
     border-radius: 3px;
@@ -190,12 +183,10 @@ canvas {
     box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
 }
 
-/* --- Прочее --- */
 .hidden {
     display: none;
 }
 
-/* --- Мобильная адаптация --- */
 @media (max-width: 900px) {
     .page-container {
         flex-direction: column;
